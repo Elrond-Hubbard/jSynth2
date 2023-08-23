@@ -4,6 +4,9 @@ const playButton = document.getElementById("play-button");
 
 // CREATE SYNTH
 const synth = new Tone.Synth().toDestination();
+const osc2 = new Tone.Synth({detune: 12}).toDestination();
+const osc3 = new Tone.Synth({detune: -12}).toDestination();
+
 
 // CREATE CONTROLLER
 const keyboard = new AudioKeys({
@@ -11,8 +14,9 @@ const keyboard = new AudioKeys({
 });
 
 keyboard.down((key) => {
-    console.log(key);
-    synth.triggerAttackRelease(key.frequency, "8n")
+    synth.triggerAttackRelease(key.frequency, "4n");
+    osc2.triggerAttackRelease(key.frequency, "4n");
+    osc3.triggerAttackRelease(key.frequency, "4n");
 })
 
 playButton.addEventListener("click", () => {
