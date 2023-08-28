@@ -2,20 +2,19 @@
 
 // SYNTH
 const synth = new Tone.Synth().toDestination();
-const {envelope, oscillator} = synth;
-const {attack, decay, sustain, release} = envelope;
-const {count, spread, type} = oscillator;
 
 // KEYBOARD CONTROLLER
 const keyboard = new AudioKeys({
     rows: 2,
     priority: 'last'
 });
-keyboard.down((key) => {
-    synth.triggerAttack(key.frequency);
+keyboard.down((note) => {
+    currentKeyDown = note.note;
+    synth.triggerAttack(note.frequency);
 })
-keyboard.up(() => {
-    synth.triggerRelease();
+keyboard.up((note) => {
+    currentKeyUp = note.note;
+    if (currentKeyUp === currentKeyDown) {synth.triggerRelease()};
 })
 
 // INIT AUDIO CONTEXT
