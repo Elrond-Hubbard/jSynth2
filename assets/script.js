@@ -11,11 +11,22 @@ waveforms.forEach(waveform =>
     }
 ));
 
+// UNISON CONTROLS
+unisonSlider = document.querySelector('#spread')
+unisonSlider.addEventListener('input', function () {
+    spread = parseInt(unisonSlider.value);
+    synth.oscillator.spread = spread;
+})
+
+
 // KEYBOARD CONTROLLER
 const keyboard = new AudioKeys({
     rows: 2,
-    priority: 'last'
+    polyphony: 1,
+    priority: 'last',
+    octave: -2
 });
+console.log(keyboard)
 keyboard.down((note) => {
     currentKeyDown = note.note;
     synth.triggerAttack(note.frequency);
