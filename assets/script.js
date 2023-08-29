@@ -1,7 +1,7 @@
 
 
 // SYNTH
-const synth = new Tone.Synth().toDestination();
+const synth = new Tone.MonoSynth().toDestination();
 console.log(synth)
 
 
@@ -24,6 +24,28 @@ const unisonSlider = document.querySelector('#spread')
 unisonSlider.addEventListener('input', function () {
     let spread = parseInt(unisonSlider.value);
     synth.oscillator.spread = spread;
+})
+
+// ENVELOPE CONTROLS
+const attackSlider = document.querySelector('#attack');
+const decaySlider = document.querySelector('#decay');
+const sustainSlider = document.querySelector('#sustain');
+const releaseSlider = document.querySelector('#release');
+attackSlider.addEventListener('input', function () {
+    let attack = parseFloat(this.value);
+    synth.envelope.attack = attack;
+})
+decaySlider.addEventListener('input', function () {
+    let decay = parseFloat(this.value);
+    synth.envelope.decay = decay;
+})
+sustainSlider.addEventListener('input', function () {
+    let sustain = parseFloat(this.value);
+    synth.envelope.sustain = sustain;
+})
+releaseSlider.addEventListener('input', function () {
+    let release = parseFloat(this.value);
+    synth.envelope.release = release;
 })
 
 

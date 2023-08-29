@@ -15,14 +15,28 @@
         <input id="triangle" value="fattriangle" type="radio" name="waveform" checked>TRI
         
     </fieldset>
-    <div>
+    <fieldset>
         <legend>SPREAD</legend>
         <input id="count-1" value="1" type="radio" name="count">1
         <input id="count-3" value="3" type="radio" name="count">3
         <input id="count-5" value="5" type="radio" name="count">5
         <input id="count-7" value="7" type="radio" name="count">7
         <input id="spread" type="range" value="0" min="0" max="50">
-    </div>
+    </fieldset>
+    <fieldset>
+        <legend>ENVELOPE</legend>
+        <div class="d-flex flex-column">
+            <label>ATTACK</label>
+            <input id="attack" type="range" value="0" min="0" max="3" step="0.1">
+            <label>DECAY</label>
+            <input id="decay" type="range" value="0" min="0" max="3" step="0.1">
+            <label>SUSTAIN</label>
+            <input id="sustain" type="range" value="0" min="0" max="1" step="0.1">
+            <label>RELEASE</label>
+            <input id="release" type="range" value="0" min="0" max="10" step="0.1">
+        </div>
+        
+    </fieldset>
     
     <button id="play-button" class="m-5">PLAY</button>
 
