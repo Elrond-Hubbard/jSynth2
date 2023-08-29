@@ -2,19 +2,27 @@
 
 // SYNTH
 const synth = new Tone.Synth().toDestination();
+console.log(synth)
+
 
 // WAVEFORM SELECTOR
-waveforms = document.querySelectorAll('input[name="waveform"]')
-waveforms.forEach(waveform =>
-    waveform.addEventListener('input', function () {
-        synth.oscillator.type = waveform.value;
+const waveformButtons = document.querySelectorAll('input[name="waveform"]')
+waveformButtons.forEach(button =>
+    button.addEventListener('input', function () {
+        synth.oscillator.type = button.value;
     }
 ));
 
 // UNISON CONTROLS
-unisonSlider = document.querySelector('#spread')
+const countButtons = document.querySelectorAll('input[name="count"]')
+countButtons.forEach(button =>
+    button.addEventListener('input', function () {
+        let count = parseInt(button.value)
+        synth.oscillator.count = count;
+    }))
+const unisonSlider = document.querySelector('#spread')
 unisonSlider.addEventListener('input', function () {
-    spread = parseInt(unisonSlider.value);
+    let spread = parseInt(unisonSlider.value);
     synth.oscillator.spread = spread;
 })
 
@@ -43,3 +51,8 @@ playButton.addEventListener('click', () => {
         Tone.start();
     }
 });
+
+// UTILITY FUNCTIONS
+function setRadioValue(synthParameter) {
+    synthParameter = button.value;
+}
