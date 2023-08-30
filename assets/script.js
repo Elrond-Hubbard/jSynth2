@@ -103,7 +103,7 @@ const shredBass = [
 
 const shredBassSequence = new Tone.Sequence((time, note) => {
     console.log(note, time);
-    synth.triggerAttackRelease(note, time)
+    synth.triggerAttackRelease(note, "16n", time)
 }, shredBass, "16n");
 
 const playButton = document.getElementById("play-button");
