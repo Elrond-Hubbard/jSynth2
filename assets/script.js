@@ -54,10 +54,14 @@ releaseSlider.addEventListener('input', function () {
 
 // FILTER CONTROLS
 cutoffSlider = document.querySelector('#cutoff')
+resonanceSlider = document.querySelector('#resonance')
 cutoffSlider.addEventListener('input', function() {
     let cutoff = parseFloat(this.value);
-    console.log(cutoff)
     synth.filterEnvelope.baseFrequency = cutoff;
+})
+resonanceSlider.addEventListener('input', function() {
+    let resonance = parseFloat(this.value);
+    synth.filter.Q.value = resonance;
 })
 
 
