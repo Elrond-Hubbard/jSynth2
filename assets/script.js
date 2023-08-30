@@ -82,14 +82,20 @@ const keyboard = new AudioKeys({
 keyboard.down((note) => {
     currentKeyDown = note.note;
     synth.triggerAttack(note.frequency);
-    console.log(note)
+    // notes are recorded to sequencer if recorder is active
+    if (recordingState==='true' && dynamicLoop.length<16) {
+        dynamicLoop.push(Tone.Frequency(note.frequency).toNote())
+    console.log(dynamicLoop)
+    sequenceLabel.innerText = dynamicLoop;
+    }
 });
 keyboard.up((note) => {
     currentKeyUp = note.note;
     if (currentKeyUp === currentKeyDown) { synth.triggerRelease() };
 });
 
-// PLAY LOOP
+// LOOPS
+// hardcoded loop
 const shredBass = [
     "A2", "A2", "C2", "D2",
     "A1", "A1", "C2", "D2",
@@ -99,15 +105,48 @@ const shredBass = [
     "G1", "G1", "B1", "C2",
     "G1", "G1", "B1", "C2",
     "G1", "G1", "B1", "C2",
-]
+];
+// dynamic loop
+var dynamicLoop = [];
 
-const shredBassSequence = new Tone.Sequence((time, note) => {
-    console.log(note, time);
-    synth.triggerAttackRelease(note, "16n", time)
-}, shredBass, "16n");
 
+// SEQUENCER
+const sequenceLabel = document.getElementById("sequence-label")
+
+// PLAY BUTTON
 const playButton = document.getElementById("play-button");
 playButton.addEventListener('click', () => {
-    shredBassSequence.start();
+    sequence = new Tone.Sequence((time, note) => {
+        console.log(note, time);
+        synth.triggerAttackRelease(note, "16n", time)
+    }, dynamicLoop, "16n").start(0);
     Tone.Transport.start();
 });
+
+// STOP BUTTON
+const stopButton = document.getElementById("stop-button");
+stopButton.addEventListener('click', () => {
+    sequence.stop(0)
+    Tone.Transport.stop(0)
+})
+
+// CLEAR BUTTON
+const clearButton = document.getElementById("clear-button")
+clearButton.addEventListener('click', () => {
+    dynamicLoop = [];
+    sequenceLabel.innerText = dynamicLoop;
+})
+
+// RECORD BUTTON
+const recordButton = document.getElementById("record-button")
+recordingState = recordButton.dataset.recording;
+console.log(recordingState)
+recordButton.addEventListener('click', () => {
+    if (recordingState === 'false') {
+        recordingState = 'true';
+        recordButton.style.backgroundColor = "red"
+    } else {
+        recordButton.style.backgroundColor = ""
+        recordingState = 'false';
+    }
+})
