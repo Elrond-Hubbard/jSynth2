@@ -1,8 +1,8 @@
 
 
 // SYNTH
-const synth = new Tone.MonoSynth().toDestination();
-console.log(synth)
+const comp = new Tone.Compressor(-50, 3).toDestination();
+const synth = new Tone.MonoSynth().connect(comp);
 
 
 // WAVEFORM SELECTOR
@@ -52,6 +52,13 @@ releaseSlider.addEventListener('input', function () {
     synth.filterEnvelope.release = release;
 })
 
+function setSliderValue(val, envelopeParam, filterParam) {
+    let (val) = parseFloat(this.value);
+    (envelopeParam) = val;
+    (filterParam) = val;
+
+}
+
 // FILTER CONTROLS
 cutoffSlider = document.querySelector('#cutoff')
 resonanceSlider = document.querySelector('#resonance')
@@ -72,25 +79,35 @@ const keyboard = new AudioKeys({
     priority: 'last',
     octave: -2
 });
-console.log(keyboard)
 keyboard.down((note) => {
     currentKeyDown = note.note;
     synth.triggerAttack(note.frequency);
+    console.log(note)
 });
 keyboard.up((note) => {
     currentKeyUp = note.note;
     if (currentKeyUp === currentKeyDown) { synth.triggerRelease() };
 });
 
-// INIT AUDIO CONTEXT
+// PLAY LOOP
+const shredBass = [
+    "A2", "A2", "C2", "D2",
+    "A1", "A1", "C2", "D2",
+    "A1", "A1", "C2", "D2",
+    "A1", "A1", "C2", "D2",
+    "G2", "G2", "B1", "C2",
+    "G1", "G1", "B1", "C2",
+    "G1", "G1", "B1", "C2",
+    "G1", "G1", "B1", "C2",
+]
+
+const shredBassSequence = new Tone.Sequence((time, note) => {
+    console.log(note, time);
+    synth.triggerAttackRelease(note, time)
+}, shredBass, "16n");
+
 const playButton = document.getElementById("play-button");
 playButton.addEventListener('click', () => {
-    if (Tone.context.state !== 'running') {
-        Tone.start();
-    }
+    shredBassSequence.start();
+    Tone.Transport.start();
 });
-
-// UTILITY FUNCTIONS
-function setRadioValue(synthParameter) {
-    synthParameter = button.value;
-}
