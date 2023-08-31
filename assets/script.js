@@ -63,22 +63,18 @@ const filterReleaseSlider = document.querySelector('#filter-release');
 attackSlider.addEventListener('input', function () {
     let attack = parseFloat(this.value);
     synth.envelope.attack = attack;
-    synth.filterEnvelope.attack = attack;
 })
 decaySlider.addEventListener('input', function () {
     let decay = parseFloat(this.value);
     synth.envelope.decay = decay;
-    synth.filterEnvelope.decay = decay;
 })
 sustainSlider.addEventListener('input', function () {
     let sustain = parseFloat(this.value);
     synth.envelope.sustain = sustain;
-    synth.filterEnvelope.sustain = sustain;
 })
 releaseSlider.addEventListener('input', function () {
     let release = parseFloat(this.value);
     synth.envelope.release = release;
-    synth.filterEnvelope.release = release;
 })
 
 // FILTER ENVELOPE
