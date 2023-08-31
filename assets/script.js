@@ -52,13 +52,6 @@ releaseSlider.addEventListener('input', function () {
     synth.filterEnvelope.release = release;
 })
 
-function setSliderValue(val, envelopeParam, filterParam) {
-    let (val) = parseFloat(this.value);
-    (envelopeParam) = val;
-    (filterParam) = val;
-
-}
-
 // FILTER CONTROLS
 cutoffSlider = document.querySelector('#cutoff')
 resonanceSlider = document.querySelector('#resonance')
@@ -109,7 +102,6 @@ const shredBass = [
 // dynamic loop
 var dynamicLoop = [];
 
-
 // SEQUENCER
 const sequenceLabel = document.getElementById("sequence-label")
 
@@ -139,7 +131,7 @@ clearButton.addEventListener('click', () => {
 
 // RECORD BUTTON
 const recordButton = document.getElementById("record-button")
-recordingState = recordButton.dataset.recording;
+let recordingState = recordButton.dataset.recording;
 console.log(recordingState)
 recordButton.addEventListener('click', () => {
     if (recordingState === 'false') {
@@ -150,3 +142,45 @@ recordButton.addEventListener('click', () => {
         recordingState = 'false';
     }
 })
+
+
+// OSCILLOSCOPE
+const canvas = document.getElementById("canvas");
+const canvasWidth = canvas.offsetWidth;
+const ctx = canvas.getContext("2d");
+
+
+
+const toneAnalyser = new Tone.Analyser({size: 2048, type: "waveform"});
+synth.connect(toneAnalyser)
+
+function draw() {
+    const drawVisual = requestAnimationFrame(draw)
+    const oscBuffer = toneAnalyser.size
+    oscArray = toneAnalyser.getValue()
+    ctx.fillRect(0, 0, 400, 100);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgb(200, 200, 0)"
+    ctx.beginPath();
+
+    const sliceWidth = 400 / oscBuffer;
+    let x = 0;
+
+    for (i = 0; i < oscBuffer; i++) {
+        const v = oscArray[i] / 16.0;
+        const y = v * (200);
+
+        if (i === 0) {
+            ctx.moveTo(x/2, y);
+        } else {
+            ctx.lineTo(x, y+50);
+        }
+
+        x += sliceWidth;
+    }
+
+    ctx.lineTo(400, 200/2);
+    ctx.stroke();
+}
+
+draw()
