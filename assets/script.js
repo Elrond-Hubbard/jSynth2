@@ -2,7 +2,31 @@
 
 // SYNTH
 const comp = new Tone.Compressor(-50, 3).toDestination();
-const synth = new Tone.MonoSynth().connect(comp);
+const synth = new Tone.MonoSynth({
+    oscillator: {
+        type: "fatsawtooth",
+        count: 1,
+        spread: 25
+    },
+    envelope: {
+        attack: 0.005,
+        decay: 0.5,
+        sustain: 0.1,
+        release: 1
+    },
+    filter: {
+        Q: 5
+    },
+    filterEnvelope: {
+        attack: 0.005,
+        decay: 0.5,
+        sustain: 0.1,
+        release: 1,
+        baseFrequency: 200
+    }
+}).connect(comp);
+
+console.log(synth)
 
 
 // WAVEFORM SELECTOR
@@ -31,6 +55,7 @@ const attackSlider = document.querySelector('#attack');
 const decaySlider = document.querySelector('#decay');
 const sustainSlider = document.querySelector('#sustain');
 const releaseSlider = document.querySelector('#release');
+
 attackSlider.addEventListener('input', function () {
     let attack = parseFloat(this.value);
     synth.envelope.attack = attack;
@@ -51,6 +76,8 @@ releaseSlider.addEventListener('input', function () {
     synth.envelope.release = release;
     synth.filterEnvelope.release = release;
 })
+
+
 
 // FILTER CONTROLS
 cutoffSlider = document.querySelector('#cutoff')
@@ -77,7 +104,7 @@ keyboard.down((note) => {
     synth.triggerAttack(note.frequency);
     // notes are recorded to sequencer if recorder is active
     if (recordingState==='true' && dynamicLoop.length<16) {
-        dynamicLoop.push(Tone.Frequency(note.frequency).toNote())
+        dynamicLoop.push(Tone.Frequency(note.frequency).toNote())//freq converted to note
     console.log(dynamicLoop)
     sequenceLabel.innerText = dynamicLoop;
     }
@@ -104,7 +131,6 @@ var dynamicLoop = [];
 
 // SEQUENCER
 const sequenceLabel = document.getElementById("sequence-label")
-
 // PLAY BUTTON
 const playButton = document.getElementById("play-button");
 playButton.addEventListener('click', () => {
@@ -112,23 +138,24 @@ playButton.addEventListener('click', () => {
         console.log(note, time);
         synth.triggerAttackRelease(note, "16n", time)
     }, dynamicLoop, "16n").start(0);
+    playButton.style.backgroundColor = "green"
+    playButton.style.color = "white"
     Tone.Transport.start();
 });
-
 // STOP BUTTON
 const stopButton = document.getElementById("stop-button");
 stopButton.addEventListener('click', () => {
+    playButton.style.backgroundColor = ""
+    playButton.style.color = ""
     sequence.stop(0)
     Tone.Transport.stop(0)
 })
-
 // CLEAR BUTTON
 const clearButton = document.getElementById("clear-button")
 clearButton.addEventListener('click', () => {
     dynamicLoop = [];
     sequenceLabel.innerText = dynamicLoop;
 })
-
 // RECORD BUTTON
 const recordButton = document.getElementById("record-button")
 let recordingState = recordButton.dataset.recording;
@@ -137,8 +164,10 @@ recordButton.addEventListener('click', () => {
     if (recordingState === 'false') {
         recordingState = 'true';
         recordButton.style.backgroundColor = "red"
+        recordButton.style.color = "white"
     } else {
         recordButton.style.backgroundColor = ""
+        recordButton.style.color = ""
         recordingState = 'false';
     }
 })
@@ -149,38 +178,34 @@ const canvas = document.getElementById("canvas");
 const canvasWidth = canvas.offsetWidth;
 const ctx = canvas.getContext("2d");
 
-
-
 const toneAnalyser = new Tone.Analyser({size: 2048, type: "waveform"});
 synth.connect(toneAnalyser)
 
 function draw() {
     const drawVisual = requestAnimationFrame(draw)
     const oscBuffer = toneAnalyser.size
-    oscArray = toneAnalyser.getValue()
-    ctx.fillRect(0, 0, 400, 100);
+    const oscArray = toneAnalyser.getValue()
+
+    ctx.fillRect(0, 0, canvasWidth, 100);
     ctx.lineWidth = 2;
-    ctx.strokeStyle = "rgb(200, 200, 0)"
+    ctx.strokeStyle = "rgb(50, 255, 0)"
     ctx.beginPath();
 
-    const sliceWidth = 400 / oscBuffer;
+    const sliceWidth = canvasWidth / oscBuffer;
     let x = 0;
 
     for (i = 0; i < oscBuffer; i++) {
         const v = oscArray[i] / 16.0;
         const y = v * (200);
-
         if (i === 0) {
-            ctx.moveTo(x/2, y);
+            ctx.moveTo(x/2-3, y);
         } else {
-            ctx.lineTo(x, y+50);
+            ctx.lineTo(x-3, y+50);
         }
-
         x += sliceWidth;
     }
 
-    ctx.lineTo(400, 200/2);
+    ctx.lineTo(canvasWidth, 200/2);
     ctx.stroke();
 }
-
 draw()
