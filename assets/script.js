@@ -26,8 +26,6 @@ const synth = new Tone.MonoSynth({
     }
 }).connect(comp);
 
-console.log(synth)
-
 
 // WAVEFORM SELECTOR
 const waveformButtons = document.querySelectorAll('input[name="waveform"]')
@@ -105,7 +103,6 @@ keyboard.down((note) => {
     // notes are recorded to sequencer if recorder is active
     if (recordingState==='true' && dynamicLoop.length<16) {
         dynamicLoop.push(Tone.Frequency(note.frequency).toNote())//freq converted to note
-    console.log(dynamicLoop)
     sequenceLabel.innerText = dynamicLoop;
     }
 });
@@ -135,9 +132,8 @@ const sequenceLabel = document.getElementById("sequence-label")
 const playButton = document.getElementById("play-button");
 playButton.addEventListener('click', () => {
     sequence = new Tone.Sequence((time, note) => {
-        console.log(note, time);
         synth.triggerAttackRelease(note, "16n", time)
-    }, dynamicLoop, "16n").start(0);
+        }, dynamicLoop, "16n").start(0);
     playButton.style.backgroundColor = "green"
     playButton.style.color = "white"
     Tone.Transport.start();
@@ -159,7 +155,6 @@ clearButton.addEventListener('click', () => {
 // RECORD BUTTON
 const recordButton = document.getElementById("record-button")
 let recordingState = recordButton.dataset.recording;
-console.log(recordingState)
 recordButton.addEventListener('click', () => {
     if (recordingState === 'false') {
         recordingState = 'true';
@@ -169,6 +164,17 @@ recordButton.addEventListener('click', () => {
         recordButton.style.backgroundColor = ""
         recordButton.style.color = ""
         recordingState = 'false';
+    }
+})
+// BPM FORM
+const bpmForm = document.getElementById("bpm-form")
+Tone.Transport.bpm.value = bpmForm.value;
+bpmForm.addEventListener('input', () => {
+    Tone.Transport.bpm.value = bpmForm.value;
+    if (bpmForm.value < 1) {
+        bpmForm.value = 1;
+    } else if (bpmForm.value > 200) {
+        bpmForm.value = 200;
     }
 })
 
