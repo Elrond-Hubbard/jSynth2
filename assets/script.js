@@ -54,6 +54,12 @@ const decaySlider = document.querySelector('#decay');
 const sustainSlider = document.querySelector('#sustain');
 const releaseSlider = document.querySelector('#release');
 
+const filterAttackSlider = document.querySelector('#filter-attack');
+const filterDecaySlider = document.querySelector('#filter-decay');
+const filterSustainSlider = document.querySelector('#filter-sustain');
+const filterReleaseSlider = document.querySelector('#filter-release');
+
+// AMP ENVELOPE
 attackSlider.addEventListener('input', function () {
     let attack = parseFloat(this.value);
     synth.envelope.attack = attack;
@@ -72,6 +78,24 @@ sustainSlider.addEventListener('input', function () {
 releaseSlider.addEventListener('input', function () {
     let release = parseFloat(this.value);
     synth.envelope.release = release;
+    synth.filterEnvelope.release = release;
+})
+
+// FILTER ENVELOPE
+filterAttackSlider.addEventListener('input', function () {
+    let attack = parseFloat(this.value);
+    synth.filterEnvelope.attack = attack;
+})
+filterDecaySlider.addEventListener('input', function () {
+    let decay = parseFloat(this.value);
+    synth.filterEnvelope.decay = decay;
+})
+filterSustainSlider.addEventListener('input', function () {
+    let sustain = parseFloat(this.value);
+    synth.filterEnvelope.sustain = sustain;
+})
+filterReleaseSlider.addEventListener('input', function () {
+    let release = parseFloat(this.value);
     synth.filterEnvelope.release = release;
 })
 
