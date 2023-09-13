@@ -148,14 +148,16 @@ var dynamicLoop = [];
 
 // SEQUENCER
 const sequenceLabel = document.getElementById("sequence-label")
+const sequence = new Tone.Sequence((time, note) => {
+    synth.triggerAttackRelease(note, "16n", time)
+    }, shredBass, "16n");
 // PLAY BUTTON
 const playButton = document.getElementById("play-button");
 playButton.addEventListener('click', () => {
-    sequence = new Tone.Sequence((time, note) => {
-        synth.triggerAttackRelease(note, "16n", time)
-        }, dynamicLoop, "16n").start(0);
     playButton.style.backgroundColor = "green"
     playButton.style.color = "white"
+    sequence.events = dynamicLoop;
+    sequence.start();
     Tone.Transport.start();
 });
 // STOP BUTTON
@@ -208,7 +210,7 @@ const toneAnalyser = new Tone.Analyser({size: 2048, type: "waveform"});
 synth.connect(toneAnalyser)
 
 function draw() {
-    const drawVisual = requestAnimationFrame(draw)
+    requestAnimationFrame(draw)
     const oscBuffer = toneAnalyser.size
     const oscArray = toneAnalyser.getValue()
 
