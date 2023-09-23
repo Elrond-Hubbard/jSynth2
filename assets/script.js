@@ -139,40 +139,16 @@ Tone.Transport.scheduleRepeat(
 var dynamicLoop = [];
 // example loops
 const loop1 = [
-  "A1",
-  "A1",
-  "A1",
-  "A2",
-  "A1",
-  "A1",
-  "A1",
-  "A2",
-  "A1",
-  "A1",
-  "A1",
-  "A2",
-  "A1",
-  "A1",
-  "C2",
-  "C2",
+  "A1","A1","A1","A2",
+  "A1","A1","A1","A2",
+  "A1","A1","A1","A2",
+  "A1","A1","C2","C2",
 ];
 const loop2 = [
-  "G1",
-  "A2",
-  "B2",
-  "C2",
-  "G1",
-  "A2",
-  "B2",
-  "C2",
-  "G1",
-  "A2",
-  "B2",
-  "C2",
-  "G1",
-  "A2",
-  "G2",
-  "G2",
+  "G1","A2","B2","C2",
+  "G1","A2","B2","C2",
+  "G1","A2","B2","C2",
+  "G1","A2","G2","G2",
 ];
 function loopHandler(element, loop) {
   element.addEventListener("click", () => {
@@ -196,7 +172,6 @@ const sequence = new Tone.Sequence(
   dynamicLoop,
   "16n"
 );
-
 // PLAY BUTTON
 const playButton = document.getElementById("play-button");
 playButton.addEventListener("click", () => {
@@ -204,8 +179,8 @@ playButton.addEventListener("click", () => {
   playButton.style.color = "white";
   sequence.events = dynamicLoop;
   sequence.start(0);
-  // kickSequence.start(0)
-  // snareSequence.start(0)
+  kickSequence.start(0)
+  snareSequence.start(0)
   Tone.Transport.start(0);
   beat = 1;
 });
@@ -215,8 +190,8 @@ stopButton.addEventListener("click", () => {
   playButton.style.backgroundColor = "";
   playButton.style.color = "";
   sequence.stop(0);
-  // kickSequence.stop(0)
-  // snareSequence.stop(0)
+  kickSequence.stop(0)
+  snareSequence.stop(0)
   Tone.Transport.stop(0);
 });
 // CLEAR BUTTON
@@ -291,11 +266,11 @@ draw();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// const kick = new Tone.MembraneSynth().connect(comp)
-// const snare = new Tone.NoiseSynth().connect(comp)
-// const kickSequence = new Tone.Sequence((time, note) => {
-//     kick.triggerAttackRelease(note, "4n", time)
-//     }, ["C2", "C2", "C2", "C2"], "4n");
-// const snareSequence = new Tone.Sequence((time, ) => {
-//     snare.triggerAttackRelease("4n", time)
-//     }, [null, "C2", null, "C2"], "4n");
+const kick = new Tone.MembraneSynth().connect(comp)
+const snare = new Tone.NoiseSynth().connect(comp)
+const kickSequence = new Tone.Sequence((time, note) => {
+    kick.triggerAttackRelease(note, "4n", time)
+    }, ["C2", "C2", "C2", "C2"], "4n");
+const snareSequence = new Tone.Sequence((time, ) => {
+    snare.triggerAttackRelease("4n", time)
+    }, [null, "C2", null, "C2"], "4n");
